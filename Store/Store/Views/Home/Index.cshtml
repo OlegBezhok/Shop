@@ -1,0 +1,52 @@
+﻿@using System.Activities.Expressions
+@using Store.Models
+
+@model IEnumerable<Store.Models.ShopViewModel>
+
+@{
+    ViewBag.Title = "Shops";
+    
+}
+
+<table class="table table-striped">
+<thead>
+    <tr>
+        <th>№ п/п</th>
+        <th>Название</th>
+        <th>Адрес</th>
+        <th>Время работы сегодня</th>
+        <th>Полный график</th>
+        <th>Продукты</th>
+
+    </tr>
+</thead>
+<tbody>
+    
+
+@foreach (var item in Model) 
+{
+    <tr>
+        <td>@item.ShopId</td>
+        <td>@item.ShopName</td>
+        <td>@item.Adress</td>
+        <td>
+            <span>@DateTime.Now.DayOfWeek: </span>
+            <span>
+                @item.TimeTable.First(x => x.DayOfWeek == DateTime.Now.DayOfWeek.ToString()).StartTime --
+                @item.TimeTable.First(x => x.DayOfWeek == DateTime.Now.DayOfWeek.ToString()).EndTime
+            </span>
+        </td>
+        <td>@foreach (var time in item.TimeTable)
+            {
+                <span> @time.DayOfWeek : @time.StartTime -- @time.EndTime</span>
+                <br>
+            }
+            </td>
+        <td><a href=@Url.Action("Products","Home", new{shop_id = item.ShopId})>Посмотреть товары</a>
+            </td>
+    </tr>
+
+}
+</tbody>
+</table>
+
